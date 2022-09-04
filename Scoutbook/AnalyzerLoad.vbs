@@ -13,6 +13,7 @@ Function getColumnFromHeader(rng As Range, heading As String) As Integer
     
   getColumnFromHeader = myIndex
 End Function
+
 Function getScoutidFromUnknown(fname As String, lname As String) As String
   Dim i As Integer, myScout As scoutRecord, scoutID As String, found As Boolean
     
