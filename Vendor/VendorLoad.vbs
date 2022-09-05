@@ -6,7 +6,7 @@ Function getColumnFromHeader(rng As Range, heading As String) As Integer
   myKey = ActiveSheet.Name & heading
   
   If (headings.Exists(myKey)) Then
-    myIndex = headings(myKey)
+    myIndex = headings.Item(myKey)
   Else
     myIndex = rng.Find(heading, LookIn:=xlValues, LookAt:=xlWhole).Column
     headings.Add myKey, myIndex
@@ -20,8 +20,8 @@ Sub loadSheet(mySheet As String)
   Dim rows As Integer, cols As Integer, i As Integer, j As Integer, rng As Range
 
   ' Initializae and sheet specific records
-  ' Dim myAdult As adultRecord, myScout As scoutRecord
-  
+  Dim myVendor As VendorRecord
+    
   ' Save the current state so it can be put back at the end of the call
   Dim returnState As ExcelState
   Set returnState = New ExcelState
@@ -36,9 +36,16 @@ Sub loadSheet(mySheet As String)
   Select Case mySheet
 
      ' Add the names of the sheets and the required processing
-     Case "TEMP"
-        ' Add processing required for this sheet
-
+     Case "VendorExport"
+     vendorExports.RemoveAll
+     For i = 6 To rows
+       Set myVendor = New VendorRecord
+       myVendor.loadFromSheet rng, i
+       vendorExports.Add myVendor.CaseID, myVendor
+    Next i
+     
+     ' Add processing required for this sheet
+     Debug.Print "Add some processing to make this interesting"
 
      Case Else
         MsgBox "Not Expected Condition"
@@ -50,4 +57,3 @@ Sub loadSheet(mySheet As String)
   ' Restore the state and return
   returnState.restore
 End Sub
-

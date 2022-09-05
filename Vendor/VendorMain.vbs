@@ -1,3 +1,4 @@
+Public vendorExports As New Dictionary
 Public headings As New Dictionary
 
 Sub loadAll()
@@ -8,13 +9,24 @@ Sub loadAll()
   headings.RemoveAll
 
   ' Load the data sheets
-  loadSheet ("TEMP")
+  loadSheet ("VendorExport")
 
   ' Process the data
+  validateVendors("VendorBooks")
   
   ' Turn off the optimizations
   OptimizeCode_End
 
   ' End the routine
   MsgBox "Finished Loading"
+End Sub
+
+
+Sub refreshVendorExport()
+  Dim fileName As String
+  'VendorExport
+  fileName = getCSVFileNameDialog("Filename for Vendor Export Report")
+  Range("B8").Value = fileName
+  clearOrCreateSheet ("VendorExport")
+  loadFileToSheet "VendorExport", fileName
 End Sub

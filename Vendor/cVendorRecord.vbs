@@ -58,7 +58,7 @@ Public Property Let RetailLink(Value As String)
   pRetailLink = Value
 End Property
 Public Property Get EntityID() As String
-  HoEntityIDurs = pEntityID
+  EntityID = pEntityID
 End Property
 Public Property Let EntityID(Value As String)
   pEntityID = Value
@@ -165,10 +165,10 @@ End Property
 Public Property Let EndDt(Value As String)
   pEndDt = Value
 End Property
-Public Property Get Type() As String
-  Type = pType
+Public Property Get mType() As String
+  mType = pType
 End Property
-Public Property Let Type(Value As String)
+Public Property Let mType(Value As String)
   pType = Value
 End Property
 Public Property Get CostAmt() As String
@@ -226,5 +226,3 @@ Public Sub loadFromSheet(rng As Range, row As Integer)
   pStatus = rng.Cells(row, getColumnFromHeader(rng, "Status"))
   pOfferID = rng.Cells(row, getColumnFromHeader(rng, "Offer ID"))
 End Sub
-
-
