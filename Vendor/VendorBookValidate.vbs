@@ -1,15 +1,28 @@
 ' This is a helper routine
-Sub validateUpdateField(rng As Range, i As Integer, upc As String, field As String, value As String)
-  Dim j As Integer, data as String, boxTitle As String, boxData as String
+Sub validateUpdateField(rng As Range, i As Integer, upc As String, field As String, value As String, isNumber As Boolean)
+  Dim j As Integer, data as String, boxTitle As String, boxData as String, cValue As Currency, cData As Currency
   
   j = getColumnFromHeader(rng, field)
   data = rng.Cells(i, j)
-  If (value <> data) Then
-    boxTitle = "Update " & field & " from VendorExport for Case UPC (" & upc & ")?"
+  boxTitle = "Update " & field & " from VendorExport for Case UPC (" & upc & ")?"
+
+  If (isNumber) Then
+    cValue = value
+    cData = data
+    boxData = "VendorBooks: " & cData & " VendorExport: " & cValue
+    If (cValue <> cData) Then
+      If (MsgBox(boxData, vbYesNo, boxTitle) = vbYes) Then
+        Debug.Print "Yes Selected"
+        rng.Cells(i, j) = cValue
+      End If
+    End If
+  Else
     boxData = "VendorBooks: " & data & " VendorExport: " & value
-    If (MsgBox(boxData, vbYesNo, boxTitle) = vbYes) Then
-      Debug.Print "Yes Selected"
-      rng.Cells(i, j) = value
+    If (value <> data) Then
+      If (MsgBox(boxData, vbYesNo, boxTitle) = vbYes) Then
+        Debug.Print "Yes Selected"
+        rng.Cells(i, j) = value
+      End If
     End If
   End If
 End Sub
@@ -45,31 +58,31 @@ Sub validateVendors(mySheet As String)
      CaseUPC = data
      
      If (myVendor.CaseID = data) Then
-        Debug.Print "Found Case UPC: " & data
+        'Debug.Print "Found Case UPC: " & data
         found = True
 
         'Validate the Data
-        validateUpdateField rng, i, CaseUPC, "Supplier #", myVendor.SupplierNumber
-        validateUpdateField rng, i, CaseUPC, "Supplier Name", myVendor.SupplierName
-        validateUpdateField rng, i, CaseUPC, "Cost Link", myVendor.CostLink
-        validateUpdateField rng, i, CaseUPC, "Retail Link", myVendor.RetailLink
-        validateUpdateField rng, i, CaseUPC, "HEB IC", myVendor.EntityID
-        validateUpdateField rng, i, CaseUPC, "UPC", myVendor.UPC
-        validateUpdateField rng, i, CaseUPC, "MFC", myVendor.MFC
-        validateUpdateField rng, i, CaseUPC, "Description", myVendor.Description
-        validateUpdateField rng, i, CaseUPC, "Master Pack", myVendor.MasterPack
-        validateUpdateField rng, i, CaseUPC, "Pack", myVendor.Pack
-        validateUpdateField rng, i, CaseUPC, "Item Size", myVendor.ItemSize
-        validateUpdateField rng, i, CaseUPC, "Commodity", myVendor.Commodity
-        validateUpdateField rng, i, CaseUPC, "Commodity Description", myVendor.CommodityDescription
-        validateUpdateField rng, i, CaseUPC, "Sub Commodity", myVendor.SubCommodity
-        validateUpdateField rng, i, CaseUPC, "Sub Commodity Description", myVendor.SubCommodityDescription
-        validateUpdateField rng, i, CaseUPC, "Pack Cost", myVendor.CostAmt
+        validateUpdateField rng, i, CaseUPC, "Supplier #", myVendor.SupplierNumber, False
+        validateUpdateField rng, i, CaseUPC, "Supplier Name", myVendor.SupplierName, False
+        validateUpdateField rng, i, CaseUPC, "Cost Link", myVendor.CostLink, False
+        validateUpdateField rng, i, CaseUPC, "Retail Link", myVendor.RetailLink, False
+        validateUpdateField rng, i, CaseUPC, "HEB IC", myVendor.EntityID, False
+        validateUpdateField rng, i, CaseUPC, "UPC", myVendor.UPC, False
+        validateUpdateField rng, i, CaseUPC, "MFC", myVendor.MFC, False
+        validateUpdateField rng, i, CaseUPC, "Description", myVendor.Description, False
+        validateUpdateField rng, i, CaseUPC, "Master Pack", myVendor.MasterPack, False
+        validateUpdateField rng, i, CaseUPC, "Pack", myVendor.Pack, False
+        validateUpdateField rng, i, CaseUPC, "Item Size", myVendor.ItemSize, False
+        validateUpdateField rng, i, CaseUPC, "Commodity", myVendor.Commodity, False
+        validateUpdateField rng, i, CaseUPC, "Commodity Description", myVendor.CommodityDescription, False
+        validateUpdateField rng, i, CaseUPC, "Sub Commodity", myVendor.SubCommodity, False
+        validateUpdateField rng, i, CaseUPC, "Sub Commodity Description", myVendor.SubCommodityDescription, False
+        validateUpdateField rng, i, CaseUPC, "Pack Cost", myVendor.CostAmt, True
       End If
     Next i
     
     If (found = False) Then
-      Debug.Print "Did not find match for CaseID " & data
+      Debug.Print "Did not find match for CaseID " & myVendor.CaseID
     End If
   Next
 
